@@ -243,10 +243,10 @@ def cluster_connection(cluster_config):
 
 
 # ============================================================================
-# VOLUME MANAGEMENT FUNCTIONS
+# AQOS POLICIES MANAGEMENT FUNCTIONS
 # ============================================================================
 
-def volume_create(volume_config):
+
     """
     Crea un volumen en la cabina NetApp ONTAP usando la REST API
     
@@ -380,7 +380,7 @@ def volume_create(volume_config):
         return False
 
 
-def volume_modify(volume_config):
+
     """
     Modifica los permisos UNIX de un volumen en la cabina NetApp ONTAP
     
@@ -649,31 +649,7 @@ if not cluster_connection(config_data['cluster']):
 
 print("\n[+] All pre-checks passed - Ready to create SVM")
 
-# VOLUME CREATION STEPS
-# Crear volumen usando la configuración del archivo YAML
-print("\n" + "="*80)
-print("  STARTING VOLUME CREATION WORKFLOW")
-print("="*80)
-
-if volume_create(config_data['volume']):
-    print("\n[SUCCESS] Volume creation completed successfully!")
-else:
-    print("\n[ERROR] Volume creation failed")
-    print("[ERROR] Check the error messages above for details")
-    exit(1)
-
-# VOLUME MODIFICATION STEPS
-# Modificar permisos UNIX del volumen usando la configuración del archivo YAML
-print("\n" + "="*80)
-print("  STARTING VOLUME MODIFICATION WORKFLOW")
-print("="*80)
-
-if volume_modify(config_data['volume']):
-    print("\n[SUCCESS] Volume modification completed successfully!")
-else:
-    print("\n[ERROR] Volume modification failed")
-    print("[ERROR] Check the error messages above for details")
-    exit(1)
+# AQOS POLICIES STEPS
 
 
 # Obtener event logs de la cabina como backup
