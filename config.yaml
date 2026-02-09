@@ -15,13 +15,14 @@ cluster:
 svm:
   name: svm_1_cluster
 
-# VOLUME SETTINGS
-volume:
-  name: vol_data_01
+
+# ADAPTIVE QOS POLICY SETTINGS
+aqos_policy:
+  name: NAS1200_SVMv2-XXXXXX-RHOSO_COR_NAS01-NAS
   vserver: svm_1_cluster
-  aggregate: cluster1_01_SSD_1
-  size: 500GB
-  security_style: unix
-  junction_path: "/vol_data_01"       
-  export_policy: default
-  unix_permissions: rwxrwxrwx
+  expected_iops: 1200              # IOPS/TB esperados
+  peak_iops: 3600                  # IOPS/TB pico
+  expected_iops_allocation: allocated_space   # allocated_space o used_space
+  peak_iops_allocation: allocated_space       # allocated_space o used_space
+  absolute_min_iops: 1200          # IOPS mínimos absolutos
+  block_size: ANY                  # Tamaño de bloque (ANY, 4k, 8k, etc.)
