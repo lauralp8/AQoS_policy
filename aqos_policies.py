@@ -337,13 +337,39 @@ def aqos_policies_creation(aqos_config):
         
         print(f"[SUCCESS] Adaptive QoS Policy '{aqos_config['name']}' created and verified!")
         
+        # Mostrar todas las políticas QoS adaptativas de la cabina
+        print(f"\n[*] Showing all Adaptive QoS policies in the cluster...")
+        print("-" * 120)
+        try:
+            all_policies = QosPolicy.get_collection(fields="name,svm.name,adaptive,uuid")
+            adaptive_policies = [policy for policy in all_policies if hasattr(policy, 'adaptive') and policy.adaptive]
+            
+            if adaptive_policies:
+                print(f"{'Policy Name':<30} {'SVM':<20} {'Expected IOPS':<20} {'Peak IOPS':<20} {'Min IOPS':<15}")
+                print("-" * 120)
+                for policy in adaptive_policies:
+                    # Obtener detalles completos de cada política
+                    policy.get()
+                    svm_name = policy.svm.name if hasattr(policy.svm, 'name') else 'N/A'
+                    expected = f"{policy.adaptive.expected_iops}/{policy.adaptive.expected_iops_allocation}" if hasattr(policy, 'adaptive') else 'N/A'
+                    peak = f"{policy.adaptive.peak_iops}/{policy.adaptive.peak_iops_allocation}" if hasattr(policy, 'adaptive') else 'N/A'
+                    min_iops = policy.adaptive.absolute_min_iops if hasattr(policy.adaptive, 'absolute_min_iops') else 'N/A'
+                    
+                    print(f"{policy.name:<30} {svm_name:<20} {expected:<20} {peak:<20} {str(min_iops):<15}")
+                print("-" * 120)
+                print(f"[*] Total Adaptive QoS Policies: {len(adaptive_policies)}\n")
+            else:
+                print("[*] No Adaptive QoS policies found in the cluster.\n")
+        except Exception as e:
+            print(f"[WARNING] Could not retrieve all QoS policies: {str(e)}\n")
+        
         return True
     
     # CONTROL DE ERRORES
     except NetAppRestError as error:
         print(f"[ERROR] NetApp REST API error during AQoS policy creation")
         print(f"[ERROR] HTTP status: {error.status_code}")
-        print(f"[ERROR] Message: {error.message}")
+        print(f"[ERROR] Message: {str(error)}")
         
         # Detallar el tipo de error
         if error.status_code == 409:
