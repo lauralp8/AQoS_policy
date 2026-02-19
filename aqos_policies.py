@@ -337,10 +337,6 @@ def aqos_policies_creation(aqos_config):
         
         print(f"[SUCCESS] Adaptive QoS Policy '{aqos_config['name']}' created and verified!")
         
-        # Obtener event logs después de la creación
-        print(f"\n[*] Retrieving cluster event logs after policy creation...")
-        get_event_logs(max_records=50)
-        
         return True
     
     # CONTROL DE ERRORES
@@ -483,10 +479,6 @@ else:
     print("\n[ERROR] Failed to create Adaptive QoS Policy")
     print("[ERROR] Check the errors above for details")
     exit(1)
-
-print("\n" + "="*70)
-print("  ALL OPERATIONS COMPLETED SUCCESSFULLY")
-print("="*70)
 
 
 # Obtener event logs de la cabina como backup final
