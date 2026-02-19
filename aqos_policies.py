@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-NetApp ONTAP SVM Creation and Configuration Script
+NetApp ONTAP Adaptive QoS Policy Creation Script
 
-This script automates the creation and configuration of Storage Virtual Machines (SVMs)
+This script automates the creation of Adaptive Quality of Service (AQoS) policies
 on NetApp ONTAP systems using the NetApp ONTAP REST API Python Client Library.
 
 Features:
-    - SVM creation with custom parameters
-    - FCP service configuration
-    - Multiple network interfaces (FCP LIFs)
-    - Management interface creation
-    - Protocol configuration
+    - Adaptive QoS policy creation with custom parameters
+    - Expected and peak IOPS configuration per TB
+    - Absolute minimum IOPS settings
+    - Space allocation type selection (allocated_space/used_space)
+    - Block size configuration
+    - Automatic policy verification
+    - Event logs backup (dual execution)
     - Comprehensive error handling and validation
 
 Requirements:
@@ -39,10 +41,10 @@ from datetime import datetime
 # SCRIPT INITIALIZATION
 # ============================================================================
 print("\n" + "="*70)
-print("  NetApp ONTAP FCP SVM Creation Script")
+print("  NetApp ONTAP Adaptive QoS Policy Creation Script")
 print("  Using NetApp ONTAP Python Client Library")
 print("="*70)
-print("\n[*] Initializing SVM creation workflow...")
+print("\n[*] Initializing AQoS policy creation workflow...")
 
 
 # ============================================================================
@@ -128,10 +130,6 @@ def save_to_log(operation_name, data):
     
     Returns:
         str: Ruta del archivo creado
-    
-    Ejemplo:
-        save_to_log('create_svm', svm_data)
-        # Crea: logs/create_svm_20260129_143025.json
     """
     try:
         # Crear carpeta logs si no existe
@@ -266,18 +264,6 @@ def aqos_policies_creation(aqos_config):
     
     Returns:
         bool: True si la creación fue exitosa, False si hubo error
-    
-    Ejemplo:
-        aqos_config = {
-            'name': 'NAS1200_policy',
-            'vserver': 'svm_1',
-            'expected_iops': 1200,
-            'peak_iops': 3600,
-            'expected_iops_allocation': 'allocated_space',
-            'peak_iops_allocation': 'allocated_space',
-            'absolute_min_iops': 1200
-        }
-        aqos_policies_creation(aqos_config)
     """
     try:
         print(f"\n[*] Creating Adaptive QoS Policy: {aqos_config.get('name', 'N/A')}")

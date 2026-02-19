@@ -18,7 +18,7 @@ svm:
 
 # ADAPTIVE QOS POLICY SETTINGS
 aqos_policy:
-  name: NUEVA_POLÍTICA_AQOS
+  name: NAS1200_SVMv2-XXXXXX-RHOSO_COR_NAS01-NAS
   vserver: svm_1_cluster
   expected_iops: 1200              # IOPS/TB esperados
   peak_iops: 3600                  # IOPS/TB pico
